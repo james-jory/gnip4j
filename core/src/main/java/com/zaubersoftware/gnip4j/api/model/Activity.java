@@ -22,8 +22,8 @@ import java.util.List;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect
 public class Activity implements Serializable {
@@ -39,6 +39,7 @@ public class Activity implements Serializable {
     @JsonProperty(value = "twitter_entities")
     private TwitterEntities twitterEntities;
     private long retweetCount;
+    private long favoritesCount;
     private Gnip gnip;
     private String verb;
     private XMLGregorianCalendar postedTime;
@@ -90,7 +91,7 @@ public class Activity implements Serializable {
         geo = value;
     }
 
-    public final Generator getGenerator() {
+	public final Generator getGenerator() {
         return generator;
     }
 
@@ -347,7 +348,15 @@ public class Activity implements Serializable {
         this.retweetCount = retweetCount;
     }
     
-    public final Object getTarget() {
+    public long getFavoritesCount() {
+		return favoritesCount;
+	}
+
+	public void setFavoritesCount(long favoritesCount) {
+		this.favoritesCount = favoritesCount;
+	}
+
+	public final Object getTarget() {
         return target;
     }
 

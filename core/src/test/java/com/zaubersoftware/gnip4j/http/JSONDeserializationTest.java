@@ -25,12 +25,12 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaubersoftware.gnip4j.api.impl.formats.JsonActivityFeedProcessor;
 import com.zaubersoftware.gnip4j.api.model.Activities;
 import com.zaubersoftware.gnip4j.api.model.Activity;
@@ -60,9 +60,9 @@ public final class JSONDeserializationTest {
         final InputStream is = getClass().getClassLoader().getResourceAsStream(
         "com/zaubersoftware/gnip4j/payload/payload-example.js");
         try  {
-            final JsonParser parser = mapper.getJsonFactory().createJsonParser(is);
+            final JsonParser parser = mapper.getFactory().createParser(is);
             final Activity activity = parser.readValueAs(Activity.class);
-            final Activity activity2= parser.readValueAs(Activity.class);
+            parser.readValueAs(Activity.class);
             
             assertNotNull(activity.getGnip());
             assertNotNull(activity.getGnip().getLanguage());
@@ -88,7 +88,7 @@ public final class JSONDeserializationTest {
         final InputStream is = getClass().getClassLoader().getResourceAsStream(
         "com/zaubersoftware/gnip4j/payload/payload-example-geo.json");
         try  {
-            final JsonParser parser = mapper.getJsonFactory().createJsonParser(is);
+            final JsonParser parser = mapper.getFactory().createParser(is);
             final Activity activity = parser.readValueAs(Activity.class);
 
             assertNotNull(activity.getGeo());
@@ -100,13 +100,12 @@ public final class JSONDeserializationTest {
         }
     }
 
-
     @Test
     public void testDeserializeWithPolygonAndPoint() throws JsonParseException, IOException{
         final InputStream is = getClass().getClassLoader().getResourceAsStream("com/zaubersoftware/gnip4j/payload/deserialize/geolocated-tweets.json");
 
         try  {
-            final JsonParser parser = mapper.getJsonFactory().createJsonParser(is);
+            final JsonParser parser = mapper.getFactory().createParser(is);
             final Activities activities = parser.readValueAs(Activities.class);
             
             
@@ -117,9 +116,9 @@ public final class JSONDeserializationTest {
             
             assertNull(geo1);
             assertEquals("lat: 35.11222481 lon: -78.99696934", geo2.getCoordinates().toString());
-            assertEquals("[[ lat: -0.5093057 lon: 51.286606 ][ lat: 0.334433 lon: 51.286606 ][ lat: 0.334433 lon: 51.691672 ][ lat: -0.5093057 lon: 51.691672 ]]", geo3.getCoordinates().toString());
+            assertEquals("[[ lat: 51.286606 lon: -0.5093057 ][ lat: 51.286606 lon: 0.334433 ][ lat: 51.691672 lon: 0.334433 ][ lat: 51.691672 lon: -0.5093057 ]]", geo3.getCoordinates().toString());
             
-            assertEquals("[[ lat: -79.058407 lon: 35.106225 ][ lat: -78.944666 lon: 35.106225 ][ lat: -78.944666 lon: 35.177993 ][ lat: -79.058407 lon: 35.177993 ]]", geo4.getCoordinates().toString());
+            assertEquals("[[ lat: 35.106225 lon: -79.058407 ][ lat: 35.106225 lon: -78.944666 ][ lat: 35.177993 lon: -78.944666 ][ lat: 35.177993 lon: -79.058407 ]]", geo4.getCoordinates().toString());
             
         } finally {
             is.close();
@@ -133,7 +132,7 @@ public final class JSONDeserializationTest {
         InputStream in = getClass().getClassLoader().getResourceAsStream("com/zaubersoftware/gnip4j/payload/deserialize/utf8_tweets.json");
         
         try  {
-            final JsonParser parser = mapper.getJsonFactory().createJsonParser(in);
+            final JsonParser parser = mapper.getFactory().createParser(in);
             final Activities activities = parser.readValueAs(Activities.class);
             
             
@@ -147,6 +146,7 @@ public final class JSONDeserializationTest {
             fileOutputStream.write(body1.getBytes("UTF-8"));
             fileOutputStream.write(body2.getBytes("UTF-8"));
             
+            fileOutputStream.close();
             
         } finally {
             //text.close();
@@ -160,7 +160,7 @@ public final class JSONDeserializationTest {
     public void testSerializable() throws IOException {
         final InputStream is = getClass().getClassLoader().getResourceAsStream(
                 "com/zaubersoftware/gnip4j/payload/payload-example.js");
-        final JsonParser parser = mapper.getJsonFactory().createJsonParser(is);
+        final JsonParser parser = mapper.getFactory().createParser(is);
         final Activity activity = parser.readValueAs(Activity.class);
         final ObjectOutputStream os = new ObjectOutputStream(new ByteArrayOutputStream());
         os.writeObject(activity);

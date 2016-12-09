@@ -26,7 +26,8 @@ import java.util.List;
  * <p>The following schema fragment specifies the expected content contained within this class.
  */
 public final class Hashtags implements Serializable {
-    private List<Integer> indices;
+	private static final long serialVersionUID = 86716997216140369L;
+	private List<Integer> indices;
     private String text;
 
     public List<Integer> getIndices() {

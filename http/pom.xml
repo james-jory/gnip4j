@@ -2,10 +2,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>zauber-gnip4j-parent</artifactId>
-		<groupId>com.zaubersoftware.gnip4j</groupId>
-		<version>1.2-SNAPSHOT</version>
+		<groupId>com.vintank.gnip4j</groupId>
+		<version>1.2.3-SNAPSHOT</version>
 	</parent>
-	<groupId>com.zaubersoftware.gnip4j</groupId>
 	<artifactId>gnip4j-http</artifactId>
 	<packaging>jar</packaging>
 	<name>Zauber::Gnip4j::HTTP Client</name>
@@ -21,7 +20,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
-			<version>4.1</version>
+			<version>4.2.5</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -50,7 +49,7 @@
 	      	<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-                        <scope>test</scope>
+            <scope>test</scope>
 		</dependency> <!--
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -60,7 +59,6 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.1.1</version>
 		</dependency>
 	</dependencies>
 </project>

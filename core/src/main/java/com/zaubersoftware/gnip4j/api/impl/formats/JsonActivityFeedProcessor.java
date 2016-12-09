@@ -19,13 +19,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ExecutorService;
 
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.Version;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.module.SimpleModule;
-
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.zaubersoftware.gnip4j.api.StreamNotification;
 import com.zaubersoftware.gnip4j.api.model.Activity;
 import com.zaubersoftware.gnip4j.api.model.Geo;
@@ -35,32 +34,32 @@ import com.zaubersoftware.gnip4j.api.support.logging.spi.Logger;
 
 
 /** process the powertracke feed */
-public class JsonActivityFeedProcessor extends BaseFeedProcessor {
+public class JsonActivityFeedProcessor extends BaseFeedProcessor<Activity> {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     
     public static final ObjectMapper getObjectMapper() {
         final ObjectMapper mapper = new ObjectMapper();
         
-        SimpleModule gnipActivityModule = new SimpleModule("gnip.activity", new Version(1, 0, 0, null));
+        SimpleModule gnipActivityModule = new SimpleModule("gnip.activity", new Version(1, 0, 0, null, null, null));
         gnipActivityModule.addDeserializer(Geo.class, new GeoDeserializer(Geo.class));
         mapper.registerModule(gnipActivityModule);
         
-        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(SerializationConfig.Feature.WRITE_NULL_PROPERTIES, false);
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper.setSerializationInclusion(Include.NON_NULL);
         
         return mapper;
     }
     
     /** constructor */
     public JsonActivityFeedProcessor(final String streamName, final ExecutorService activityService,
-            final StreamNotification notification) {
+            final StreamNotification<Activity> notification) {
         super(streamName, activityService, notification);
     }
     
     @Override
     public final void process(final InputStream is) throws IOException {
         final JsonParser parser =  JsonActivityFeedProcessor
-                .getObjectMapper().getJsonFactory().createJsonParser(is);
+                .getObjectMapper().getFactory().createParser(is);
 
         logger.debug("Starting to consume activity stream {} ...", streamName);
         while(!Thread.interrupted()) {

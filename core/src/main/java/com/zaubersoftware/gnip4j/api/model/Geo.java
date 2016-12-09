@@ -27,7 +27,8 @@ import java.io.Serializable;
  * this class.
  */
 public class Geo implements Serializable {
-    private Geometry coordinates;
+	private static final long serialVersionUID = 3716718651905145760L;
+	private Geometry coordinates;
     private String type;
 
     public final Geometry getCoordinates() {

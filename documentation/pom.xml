@@ -2,10 +2,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>zauber-gnip4j-parent</artifactId>
-		<groupId>com.zaubersoftware.gnip4j</groupId>
-		<version>1.2-SNAPSHOT</version>
+		<groupId>com.vintank.gnip4j</groupId>
+		<version>1.2.3-SNAPSHOT</version>
 	</parent>
-	<groupId>com.zaubersoftware.gnip4j.documentation</groupId>
+	<groupId>com.vintank.gnip4j.documentation</groupId>
 	<artifactId>gnip4j-documentation-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Zauber::Gnip4j::Documentation Parent</name>

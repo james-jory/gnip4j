@@ -22,9 +22,8 @@ import java.io.InputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
-
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zaubersoftware.gnip4j.api.EDCStreamBuilder;
 import com.zaubersoftware.gnip4j.api.GnipFacade;
 import com.zaubersoftware.gnip4j.api.GnipStream;
@@ -175,7 +174,7 @@ public class DefaultGnipFacade implements GnipFacade {
             final InputStream gnipRestResponseStream = facade.getResource(baseUriStrategy
                     .createRulesUri(account, streamName));
             final JsonParser parser =  JsonActivityFeedProcessor.getObjectMapper()
-                    .getJsonFactory().createJsonParser(gnipRestResponseStream);
+                    .getFactory().createParser(gnipRestResponseStream);
             final Rules rules = parser.readValueAs(Rules.class);
             gnipRestResponseStream.close();
             return rules;

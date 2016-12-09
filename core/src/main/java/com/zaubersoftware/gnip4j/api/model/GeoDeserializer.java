@@ -20,12 +20,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.deser.StdDeserializer;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 /**
  * TODO Descripcion de la clase. Los comentarios van en castellano.
@@ -35,8 +34,9 @@ import org.codehaus.jackson.map.deser.StdDeserializer;
  * @since Feb 15, 2012
  */
 public class GeoDeserializer extends StdDeserializer<Geo> {
+	private static final long serialVersionUID = -4968396936087643364L;
 
-    /** Creates the GeoDeserializer. */
+	/** Creates the GeoDeserializer. */
     public GeoDeserializer(final Class<Geo> clazz) {
         super(clazz);
     }
@@ -46,30 +46,34 @@ public class GeoDeserializer extends StdDeserializer<Geo> {
             JsonProcessingException {
         final JsonNode tree = jp.readValueAsTree();
 
-        final JsonNode coordinates = tree.findValue("coordinates");
-        final JsonNode type = tree.findValue("type");
-
+        final JsonNode coordinates = tree.get("coordinates");
+        final JsonNode type = tree.get("type");
+        final JsonNode objectType = tree.get("objectType");
 
         final Geo geo = new Geo();
-        geo.setType(type.getTextValue());
+        geo.setType(type.asText());
 
-        if(Geometries.valueOf(type.getTextValue()) == Geometries.Polygon) {
+        if(Geometries.valueOf(type.asText()) == Geometries.Polygon) {
             geo.setCoordinates(this.createPolygon(coordinates));
         } else {
-            geo.setCoordinates(this.createPoint(coordinates));
+            geo.setCoordinates(this.createPoint(coordinates, objectType != null && "place".equals(objectType.asText())));
         }
 
         return geo;
     }
 
     /** @return a point */
-    private Point createPoint(final JsonNode coordinates) throws IOException {
+    private Point createPoint(final JsonNode coordinates, boolean geoJson) throws IOException {
         final Point ret;
         if(coordinates.isArray()) {
-            ret = new Point(coordinates.get(0).getDoubleValue(), coordinates.get(1).getDoubleValue());
+        	// The deprecated "geo" entity uses lat,lng while places and and polygon points use lng,lat. 
+        	if (!geoJson)
+        		ret = new Point(coordinates.get(0).asDouble(), coordinates.get(1).asDouble());
+        	else
+        		ret = new Point(coordinates.get(1).asDouble(), coordinates.get(0).asDouble());
         } else {
-            ret = new Point(coordinates.get("latitude").getDoubleValue(), 
-                            coordinates.get("longitude").getDoubleValue());
+            ret = new Point(coordinates.get("latitude").asDouble(), 
+                    coordinates.get("longitude").asDouble());
         }
         return ret;
     }
@@ -82,11 +86,11 @@ public class GeoDeserializer extends StdDeserializer<Geo> {
             elements = coordinates.get("points").iterator();
         } else {
             final JsonNode values = coordinates.get(0);
-            elements = values.getElements();
+            elements = values.elements();
         }
         while(elements.hasNext()) {
             final JsonNode next = elements.next();
-            points.add(createPoint(next));
+            points.add(createPoint(next, true));
         }
         return new Polygon(points);
     }

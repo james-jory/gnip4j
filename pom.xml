@@ -7,9 +7,9 @@
 		<version>1.0.10</version>
 	</parent>
 	<name>Zauber::Gnip4j</name>
-	<groupId>com.zaubersoftware.gnip4j</groupId>
+	<groupId>com.vintank.gnip4j</groupId>
 	<artifactId>zauber-gnip4j-parent</artifactId>
-	<version>1.2-SNAPSHOT</version>
+	<version>1.2.3</version>
 	<packaging>pom</packaging>
 
 	<scm>
@@ -55,6 +55,17 @@
     <url>https://github.com/zaubersoftware/gnip4j/issues</url>
   </issueManagement>
  	<distributionManagement>
+		<repository>
+			<id>nexus</id>
+			<name>VinTank Releases</name>
+			<url>http://nexus.vintank.com/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus</id>
+			<name>VinTank Snapshot</name>
+			<url>http://nexus.vintank.com/content/repositories/snapshots</url>
+		</snapshotRepository>
+<!--  	
                <repository> 
                  <id>sonatype-nexus-staging</id> 
                  <name>Nexus Release Repository</name> 
@@ -65,6 +76,7 @@
 			<name>Zauber Code Snapshots</name>
 			<url>https://repo1.zauberlabs.com/content/repositories/zauber-code-snapshots</url>
 		</snapshotRepository>
+-->
 	</distributionManagement>
 
 	<modules>
@@ -156,8 +168,8 @@
 		</dependency>
 	</dependencies>
 	<properties>
-		<jackson.version>1.8.0</jackson.version>
-		<slf4j.version>1.6.1</slf4j.version>
+		<jackson.version>2.4.1</jackson.version>
+		<slf4j.version>1.7.5</slf4j.version>
 
 		<sonar.mantis.id>44</sonar.mantis.id>
 		<crono.organization.name>zauber</crono.organization.name>
@@ -167,20 +179,20 @@
 	<dependencyManagement>
 	  <dependencies>
             <dependency>
-              <groupId>org.codehaus.jackson</groupId> 
-              <artifactId>jackson-core-asl</artifactId> 
+              <groupId>com.fasterxml.jackson.core</groupId> 
+              <artifactId>jackson-core</artifactId> 
               <version>${jackson.version}</version> 
             </dependency>
             <dependency>
-              <groupId>org.codehaus.jackson</groupId> 
-              <artifactId>jackson-mapper-asl</artifactId> 
+              <groupId>com.fasterxml.jackson.core</groupId> 
+              <artifactId>jackson-databind</artifactId> 
               <version>${jackson.version}</version> 
             </dependency>
-            <dependency>
-              <groupId>org.codehaus.jackson</groupId> 
-              <artifactId>jackson-xc</artifactId> 
+	        <dependency>
+    	      <groupId>com.fasterxml.jackson.core</groupId> 
+       	      <artifactId>jackson-annotations</artifactId> 
               <version>${jackson.version}</version> 
-            </dependency>
+        	</dependency>
 
 	    <!-- Logging -->
           <dependency>
@@ -233,7 +245,7 @@
 		<dependency>
 			<artifactId>junit</artifactId>
 			<groupId>junit</groupId>
-			<version>4.7</version>
+			<version>4.11</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -249,22 +261,22 @@
 		<dependency>
             		<groupId>commons-io</groupId>
             		<artifactId>commons-io</artifactId>
-            		<version>2.0.1</version>
+            		<version>2.4</version>
         	</dependency>
         	<dependency>
             		<groupId>commons-codec</groupId>
             		<artifactId>commons-codec</artifactId>
-            		<version>1.5</version>
+            		<version>1.7</version>
         	</dependency>
         	<dependency>
             		<groupId>joda-time</groupId>
             		<artifactId>joda-time</artifactId>
-            		<version>1.6.2</version>
+            		<version>2.1</version>
         	</dependency>
 		<dependency>
     			<groupId>org.apache.httpcomponents</groupId>
     			<artifactId>httpclient</artifactId>
-    			<version>4.1.1</version>
+    			<version>4.2.5</version>
                         <exclusions>
                             <exclusion>
                                <artifactId>commons-logging</artifactId>

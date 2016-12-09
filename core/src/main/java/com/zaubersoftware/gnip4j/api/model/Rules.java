@@ -16,10 +16,11 @@
 package com.zaubersoftware.gnip4j.api.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 
 /**
@@ -30,15 +31,22 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 @JsonAutoDetect
 public final class Rules implements Serializable {
     private static final long serialVersionUID = 1L;
-    private List<Rule> rules;
+    private Set<Rule> rules;
 
+    public Rules() {
+    }
+    
+    public Rules(Collection<Rule> rules) {
+    	this.rules = new LinkedHashSet<Rule>(rules);
+    }
+    
     /**
      * Gets the value of the rule property.
      *
      * <p>
-     * This accessor method returns a reference to the live list,
+     * This accessor method returns a reference to the live set,
      * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
+     * returned set will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the rule property.
      *
      * <p>
@@ -49,16 +57,36 @@ public final class Rules implements Serializable {
      *
      *
      * <p>
-     * Objects of the following type(s) are allowed in the list
+     * Objects of the following type(s) are allowed in the set
      * {@link Rule }
      *
      *
      */
-    public List<Rule> getRules() {
+    public Set<Rule> getRules() {
         if (rules == null) {
-            rules = new ArrayList<Rule>();
+            rules = new LinkedHashSet<Rule>();
         }
         return rules;
     }
 
+    /**
+     * Returns true if a rule with the specified value exists in this
+     * Rules collection.
+     * 
+     * @param value Rule value to check
+     * @return true if a Rule with same value exists in this Rules collection
+     */
+    public boolean contains(String value) {
+    	return rules != null ? rules.contains(new Rule(value)) : false;
+    }
+
+    /**
+     * Returns true if a rule exists in this Rules collection.
+     * 
+     * @param rule Rule to check
+     * @return true if a Rule with the same value as the Rule's value exists in this Rules collection
+     */
+    public boolean contains(Rule rule) {
+    	return rules != null && rule != null ? rules.contains(rule) : false;
+    }
 }

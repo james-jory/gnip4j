@@ -58,6 +58,7 @@ public final class Actor implements Serializable {
     private String twitterTimeZone;
     private BigInteger friendsCount;
     private BigInteger followersCount;
+    private BigInteger favoritesCount;
     private String summary;
     private String link;
     private String image;
@@ -223,7 +224,15 @@ public final class Actor implements Serializable {
         followersCount = value;
     }
 
-    public String getSummary() {
+    public BigInteger getFavoritesCount() {
+		return favoritesCount;
+	}
+
+	public void setFavoritesCount(final BigInteger favoritesCount) {
+		this.favoritesCount = favoritesCount;
+	}
+
+	public String getSummary() {
         return summary;
     }
 
@@ -274,8 +283,8 @@ public final class Actor implements Serializable {
     }
 
     public static final class Location implements Serializable {
-        
-        private String displayName;
+		private static final long serialVersionUID = -2010823433293892892L;
+		private String displayName;
         private String objectType;
 
         public String getDisplayName() {

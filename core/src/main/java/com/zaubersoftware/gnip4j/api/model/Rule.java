@@ -17,7 +17,7 @@ package com.zaubersoftware.gnip4j.api.model;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 
 /**
@@ -32,6 +32,18 @@ public final class Rule implements Serializable {
     private String value;
     private String tag;
 
+    public Rule() {
+    }
+
+    public Rule(String value) {
+    	this(value, null);
+    }
+
+    public Rule(String value, String tag) {
+    	this.value = value;
+    	this.tag = tag;
+    }
+    
     public String getValue() {
         return value;
     }
@@ -56,30 +68,28 @@ public final class Rule implements Serializable {
         if(this == obj) {
             ret = true;
         } else if(obj instanceof Rule) {
-            final Rule r = ((Rule)obj);
+            final Rule r = (Rule)obj;
             
-            ret = equals(value, r.value) && equals(tag, r.tag); 
+            // The tag is irrelevant for equality. Only compare the 
+            // value (case-insensitive).
+            ret = equalsIgnoreCase(value, r.value); 
         }
         return ret;
     }
 
     @Override
     public int hashCode() {
-        int ret = 17;
-        
-        ret = 19 * ret + value == null ? 0 : value.hashCode();
-        ret = 19 * ret + tag == null ? 0 : tag.hashCode();
-        return ret;
+    	return value != null ? value.toLowerCase().hashCode() : 0;
     }
     
-    private static boolean equals(final String s1, final String s2) {
+    private static boolean equalsIgnoreCase(final String s1, final String s2) {
         boolean ret = false;
         if(s1 == null && s2 == null) {
             ret = true;
         } else if(s1 == null || s2 == null) {
             ret = false;
         } else {
-            ret = s1.equals(s2);
+            ret = s1.equalsIgnoreCase(s2);
         }
         return ret;
     }
